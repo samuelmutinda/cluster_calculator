@@ -73,7 +73,7 @@ export function GradeForm() {
 
     const handleSubjectStateChange = (index, selectedSubject, selectedGrade) => {
         const updatedSelectedSubjectsData = [...selectedSubjectsData];
-        updatedSelectedSubjectsData[index] = { subject: selectedSubject, grade: selectedGrade };
+        updatedSelectedSubjectsData[index] = { subject: selectedSubject, grade: parseInt(selectedGrade) };
         setSelectedSubjectsData(updatedSelectedSubjectsData);
     };
     return (
