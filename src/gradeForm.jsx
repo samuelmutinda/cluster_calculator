@@ -36,6 +36,11 @@ const subject7 = {
     gradeNumber: 'Grade for subject 7'
 }
 
+const subject8 = {
+    subjectNumber: 'Subject 8',
+    gradeNumber: 'Grade for subject 8'
+}
+
 let subjects = [
     "Mathematics", 
     "Physics", 
@@ -64,17 +69,24 @@ let subjects = [
 ];
 
 export function GradeForm() {
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Do something with the selectedSubjectsData, for example, send it to a server.
-        console.log("Selected Subjects and Grades:", selectedSubjectsData);
-    };
+    
     const [selectedSubjectsData, setSelectedSubjectsData] = useState([]);
+    const [mpesaNumber, setMpesaNumber] = useState("");
 
     const handleSubjectStateChange = (index, selectedSubject, selectedGrade) => {
         const updatedSelectedSubjectsData = [...selectedSubjectsData];
         updatedSelectedSubjectsData[index] = { subject: selectedSubject, grade: parseInt(selectedGrade) };
         setSelectedSubjectsData(updatedSelectedSubjectsData);
+    };
+
+    const handleMpesaChange = (e) => {
+        setMpesaNumber(e.target.value);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("Selected Subjects and Grades:", selectedSubjectsData);
+        console.log("M-Pesa Number:", mpesaNumber);
     };
     return (
         <form 
@@ -136,15 +148,20 @@ export function GradeForm() {
                 onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(6, selectedSubject, selectedGrade)}
                 selectedSubjects={selectedSubjectsData.map(data => data.subject)}
             />
-            {/* <SubjectAndGrade 
-                {...subject7} subjects = {subjects} 
-                onSubjectStateChange={(selectedSubject) => handleSubjectStateChange(7, selectedSubject)}
-                selectedSubjects = {selectedSubjects}
-            /> */}
+            <SubjectAndGrade 
+                {...subject8}
+                subjects={subjects}
+                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(7, selectedSubject, selectedGrade)}
+                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
+            />
             <div className="mpesaNumber">
                 <label htmlFor="fname" >Enter your M-Pesa Number:</label>
                 <br />
-                <input type="text" id="mpesa" required ></input>
+                <input 
+                    type="text" 
+                    id="mpesa" 
+                    value={mpesaNumber}
+                    onChange={handleMpesaChange}required ></input>
             </div>
             <div className="submitbuttonbox">
                 <input type="submit" value="Calculate" id="submitbutton"></input>
