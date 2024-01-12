@@ -64,12 +64,17 @@ let subjects = [
 ];
 
 export function GradeForm() {
-    const [selectedSubjects, setSelectedSubjects] = useState([]);
-    // let unselectedSubjects = subjects.filter(subject => !selectedSubjects.includes(subject));
-    const handleSubjectStateChange = (index, selectedSubject) => {
-        const updatedSelectedSubjects = [...selectedSubjects];
-        updatedSelectedSubjects[index] = selectedSubject;
-        setSelectedSubjects(updatedSelectedSubjects);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Do something with the selectedSubjectsData, for example, send it to a server.
+        console.log("Selected Subjects and Grades:", selectedSubjectsData);
+    };
+    const [selectedSubjectsData, setSelectedSubjectsData] = useState([]);
+
+    const handleSubjectStateChange = (index, selectedSubject, selectedGrade) => {
+        const updatedSelectedSubjectsData = [...selectedSubjectsData];
+        updatedSelectedSubjectsData[index] = { subject: selectedSubject, grade: selectedGrade };
+        setSelectedSubjectsData(updatedSelectedSubjectsData);
     };
     return (
         <form 
@@ -77,6 +82,7 @@ export function GradeForm() {
             id="grades" 
             className="input-form" 
             method="post"
+            onSubmit={handleSubmit}
         >
             <div className="formtitle">
                 <p>Select the subjects and their corresponding grades</p>
@@ -89,48 +95,52 @@ export function GradeForm() {
                 </p>
             </div>
             <SubjectAndGrade 
-                {...subject1} 
-                subjects = {subjects} 
-                onSubjectStateChange={(selectedSubject) => handleSubjectStateChange(0, selectedSubject)}
-                selectedSubjects = {selectedSubjects}
+                {...subject1}
+                subjects={subjects}
+                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(0, selectedSubject, selectedGrade)}
+                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
             />
             <SubjectAndGrade {...subject2} 
-                subjects = {subjects} 
-                onSubjectStateChange={(selectedSubject) => handleSubjectStateChange(1, selectedSubject)}
-                selectedSubjects = {selectedSubjects}
+                {...subject2}
+                subjects={subjects}
+                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(1, selectedSubject, selectedGrade)}
+                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
             />
             <SubjectAndGrade 
-                {...subject3} 
-                subjects = {subjects} 
-                onSubjectStateChange={(selectedSubject) => handleSubjectStateChange(2, selectedSubject)}
-                selectedSubjects = {selectedSubjects}
+                {...subject3}
+                subjects={subjects}
+                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(2, selectedSubject, selectedGrade)}
+                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
             />
             <SubjectAndGrade 
-                {...subject4} 
-                subjects = {subjects} 
-                onSubjectStateChange={(selectedSubject) => handleSubjectStateChange(3, selectedSubject)}
-                selectedSubjects = {selectedSubjects}
+                {...subject4}
+                subjects={subjects}
+                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(3, selectedSubject, selectedGrade)}
+                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
             />
             <SubjectAndGrade 
-                {...subject5} subjects = {subjects} 
-                onSubjectStateChange={(selectedSubject) => handleSubjectStateChange(4, selectedSubject)}
-                selectedSubjects = {selectedSubjects}
+                {...subject5}
+                subjects={subjects}
+                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(4, selectedSubject, selectedGrade)}
+                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
             />
             <SubjectAndGrade 
-                {...subject6} subjects = {subjects} 
-                onSubjectStateChange={(selectedSubject) => handleSubjectStateChange(5, selectedSubject)}
-                selectedSubjects = {selectedSubjects}
+                {...subject6}
+                subjects={subjects}
+                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(5, selectedSubject, selectedGrade)}
+                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
             />
             <SubjectAndGrade 
-                {...subject7} subjects = {subjects} 
-                onSubjectStateChange={(selectedSubject) => handleSubjectStateChange(6, selectedSubject)}
-                selectedSubjects = {selectedSubjects}
+                {...subject7}
+                subjects={subjects}
+                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(6, selectedSubject, selectedGrade)}
+                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
             />
-            <SubjectAndGrade 
+            {/* <SubjectAndGrade 
                 {...subject7} subjects = {subjects} 
                 onSubjectStateChange={(selectedSubject) => handleSubjectStateChange(7, selectedSubject)}
                 selectedSubjects = {selectedSubjects}
-            />
+            /> */}
             <div className="mpesaNumber">
                 <label htmlFor="fname" >Enter your M-Pesa Number:</label>
                 <br />

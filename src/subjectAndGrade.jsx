@@ -20,6 +20,12 @@ export function SubjectAndGrade({subjectNumber, gradeNumber, subjects, onSubject
         return selectedSubjects.includes(subject);
     };
     const [gradeState, setGradeState] = useState("")
+    const handleGradeChange = (e) => {
+        const selectedGrade = e.target.value;
+        onSubjectStateChange(subjectState, selectedGrade);
+        setGradeState(selectedGrade);
+    };
+
     return (
         <div className="subjectandgrade">
             <div className="subjectselection">
@@ -64,10 +70,7 @@ export function SubjectAndGrade({subjectNumber, gradeNumber, subjects, onSubject
                     id="grade-selection"
                     data-required="1"
                     data-placeholder="Select Grade"
-                    onChange={(e)=>{
-                        const selectedGrade=e.target.value;
-                        setGradeState(selectedGrade);
-                    }} 
+                    onChange={handleGradeChange}
                 >
                     <option value="" data-select2-id="grade-placeholder">
                         Select Grade
