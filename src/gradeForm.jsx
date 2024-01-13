@@ -1,47 +1,18 @@
-import { SubjectAndGrade } from "./subjectAndGrade"
+import { SubjectAndGrade } from "./subjectAndGrade";
 import { useState } from 'react';
 
-const subject1 = {
-    subjectNumber: 'Subject 1',
-    gradeNumber: 'Grade for subject 1'
-}
+const subjectsData = [
+    { subjectNumber: 'Subject 1', gradeNumber: 'Grade for subject 1' },
+    { subjectNumber: 'Subject 2', gradeNumber: 'Grade for subject 2' },
+    { subjectNumber: 'Subject 3', gradeNumber: 'Grade for subject 3' },
+    { subjectNumber: 'Subject 4', gradeNumber: 'Grade for subject 4' },
+    { subjectNumber: 'Subject 5', gradeNumber: 'Grade for subject 5' },
+    { subjectNumber: 'Subject 6', gradeNumber: 'Grade for subject 6' },
+    { subjectNumber: 'Subject 7', gradeNumber: 'Grade for subject 7' },
+    { subjectNumber: 'Subject 8', gradeNumber: 'Grade for subject 8' }
+];
 
-const subject2 = {
-    subjectNumber: 'Subject 2',
-    gradeNumber: 'Grade for subject 2'
-}
-
-const subject3 = {
-    subjectNumber: 'Subject 3',
-    gradeNumber: 'Grade for subject 3'
-}
-
-const subject4 = {
-    subjectNumber: 'Subject 4',
-    gradeNumber: 'Grade for subject 4'
-}
-
-const subject5 = {
-    subjectNumber: 'Subject 5',
-    gradeNumber: 'Grade for subject 5'
-}
-
-const subject6 = {
-    subjectNumber: 'Subject 6',
-    gradeNumber: 'Grade for subject 6'
-}
-
-const subject7 = {
-    subjectNumber: 'Subject 7',
-    gradeNumber: 'Grade for subject 7'
-}
-
-const subject8 = {
-    subjectNumber: 'Subject 8',
-    gradeNumber: 'Grade for subject 8'
-}
-
-let subjects = [
+const subjects = [
     "Mathematics", 
     "Physics", 
     "Chemistry", 
@@ -68,8 +39,34 @@ let subjects = [
     "Business Studies"
 ];
 
+const subjectValues = [
+    "mat", 
+    "phy", 
+    "chem", 
+    "bio",
+    "eng",
+    "swa",
+    "his",
+    "geo",
+    "re",
+    "re",
+    "re",
+    "hsci",
+    "art",
+    "agr",
+    "cs",
+    "avi",
+    "elec",
+    "pm",
+    "ww",
+    "fre",
+    "ger",
+    "ara",
+    "music",
+    "bs"
+];
+
 export function GradeForm() {
-    
     const [selectedSubjectsData, setSelectedSubjectsData] = useState([]);
     const [mpesaNumber, setMpesaNumber] = useState("");
 
@@ -88,6 +85,7 @@ export function GradeForm() {
         console.log("Selected Subjects and Grades:", selectedSubjectsData);
         console.log("M-Pesa Number:", mpesaNumber);
     };
+
     return (
         <form 
             action=""
@@ -106,54 +104,18 @@ export function GradeForm() {
                     the transaction on your phone.
                 </p>
             </div>
-            <SubjectAndGrade 
-                {...subject1}
-                subjects={subjects}
-                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(0, selectedSubject, selectedGrade)}
-                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
-            />
-            <SubjectAndGrade {...subject2} 
-                {...subject2}
-                subjects={subjects}
-                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(1, selectedSubject, selectedGrade)}
-                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
-            />
-            <SubjectAndGrade 
-                {...subject3}
-                subjects={subjects}
-                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(2, selectedSubject, selectedGrade)}
-                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
-            />
-            <SubjectAndGrade 
-                {...subject4}
-                subjects={subjects}
-                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(3, selectedSubject, selectedGrade)}
-                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
-            />
-            <SubjectAndGrade 
-                {...subject5}
-                subjects={subjects}
-                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(4, selectedSubject, selectedGrade)}
-                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
-            />
-            <SubjectAndGrade 
-                {...subject6}
-                subjects={subjects}
-                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(5, selectedSubject, selectedGrade)}
-                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
-            />
-            <SubjectAndGrade 
-                {...subject7}
-                subjects={subjects}
-                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(6, selectedSubject, selectedGrade)}
-                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
-            />
-            <SubjectAndGrade 
-                {...subject8}
-                subjects={subjects}
-                onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(7, selectedSubject, selectedGrade)}
-                selectedSubjects={selectedSubjectsData.map(data => data.subject)}
-            />
+
+            {subjectsData.map((subject, index) => (
+                <SubjectAndGrade 
+                    key={index}
+                    {...subject}
+                    subjects={subjects}
+                    onSubjectStateChange={(selectedSubject, selectedGrade) => handleSubjectStateChange(index, selectedSubject, selectedGrade)}
+                    selectedSubjects={selectedSubjectsData.map(data => data.subject)}
+                    subjectValues={subjectValues}
+                />
+            ))}
+
             <div className="mpesaNumber">
                 <label htmlFor="fname" >Enter your M-Pesa Number:</label>
                 <br />
@@ -161,11 +123,13 @@ export function GradeForm() {
                     type="text" 
                     id="mpesa" 
                     value={mpesaNumber}
-                    onChange={handleMpesaChange}required ></input>
+                    onChange={handleMpesaChange}
+                    required 
+                />
             </div>
             <div className="submitbuttonbox">
-                <input type="submit" value="Calculate" id="submitbutton"></input>
+                <input type="submit" value="Calculate" id="submitbutton" />
             </div>
         </form>
-    )
+    );
 }
