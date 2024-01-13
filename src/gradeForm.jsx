@@ -40,7 +40,7 @@ const subjects = [
 ];
 
 const subjectValues = [
-    "mat", 
+    "math", 
     "phy", 
     "chem", 
     "bio",
@@ -70,6 +70,7 @@ export function GradeForm() {
     const [selectedSubjectsData, setSelectedSubjectsData] = useState([]);
     const [mpesaNumber, setMpesaNumber] = useState("");
 
+    
     const handleSubjectStateChange = (index, selectedSubject, selectedGrade) => {
         const updatedSelectedSubjectsData = [...selectedSubjectsData];
         updatedSelectedSubjectsData[index] = { subject: selectedSubject, grade: parseInt(selectedGrade) };
@@ -82,7 +83,35 @@ export function GradeForm() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const groupedSubjects = {
+            compulsory: [],
+            G2: [],
+            G3: [],
+            G4: [],
+            G5: [],
+        };
+
+        const categorizeSubject = (subject, grade) => {
+            if (["eng", "math", "swa"].includes(subject)) {
+                groupedSubjects.compulsory.push({ [subject]: grade });
+            } else if (["phy", "bio", "chem"].includes(subject)) {
+                groupedSubjects.G2.push({ [subject]: grade });
+            } else if (["his", "geo", "re"].includes(subject)) {
+                groupedSubjects.G3.push({ [subject]: grade });
+            } else if (["hsci", "art", "agr", "cs", "avi", "elec", "pm", "ww"].includes(subject)) {
+                groupedSubjects.G4.push({ [subject]: grade });
+            } else if (["fre", "ger", "ara", "music", "bs"].includes(subject)) {
+                groupedSubjects.G5.push({ [subject]: grade });
+            }
+        };
+
+        selectedSubjectsData.forEach(({ subject, grade }) => {
+            categorizeSubject(subject, grade);
+        });
+
         console.log("Selected Subjects and Grades:", selectedSubjectsData);
+        console.log("Grouped Subjects:", groupedSubjects);
         console.log("M-Pesa Number:", mpesaNumber);
     };
 
