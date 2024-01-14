@@ -21,7 +21,7 @@ export function SubjectAndGrade({
     const handleSubjectChange = (e) => {
         const selectedSubject = e.target.value;
         setSubjectState(selectedSubject);
-        onSubjectStateChange(selectedSubject);
+        onSubjectStateChange(selectedSubject, gradeState);
     };
 
     const isSubjectSelected = (subject) => {
