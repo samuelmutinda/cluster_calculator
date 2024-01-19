@@ -29,6 +29,13 @@ body {
     text-align: center;
   }
 
+  .resultstitle {
+    color: #fff;
+    font-size: 30px;
+    font-weight: 100;
+    text-align: center;
+  }
+
   .formdescription {
     padding-bottom: 5px;
     text-align: center;
@@ -110,8 +117,32 @@ body {
     font-weight: 100;
   }
 
+
+  table {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+  }
+
+  th {
+    font-size: 17px;
+  }
+
+  th, td {
+    border:1px solid #fff;
+    text-align: center;
+    padding: 7px;
+  }
+  
   @media only screen and (min-width: 798px) {
     form {
       width: 798px;
+    }
+    table {
+      width: 40%;
+      margin-left: auto;
+      margin-right: auto;
+      border-collapse: collapse;
     }
   }

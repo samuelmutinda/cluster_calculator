@@ -58,7 +58,7 @@ export function SubjectAndGrade({
                 <select
                     name=""
                     id="subject-selection"
-                    data-required="1"
+                    required
                     data-placeholder="Select Subject"
                     onChange={handleSubjectChange}
                 >
@@ -90,7 +90,7 @@ export function SubjectAndGrade({
                 <select
                     name=""
                     id="grade-selection"
-                    data-required="1"
+                    required
                     data-placeholder="Select Grade"
                     onChange={handleGradeChange}
                 >
