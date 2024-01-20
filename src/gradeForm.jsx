@@ -438,6 +438,16 @@ export function GradeForm({ onSubmit }) {
                 <div className="submitbuttonbox">
                     <input type="submit" value="Calculate" id="submitbutton" />
                 </div>
+                <div className="report_form">
+                <br />
+                    <label htmlFor="fname" >Report an issue:</label>
+                    <br />
+                    <textarea 
+                        type="text" 
+                        id="report" 
+                        // value={report}
+                    />
+                </div>
             </form>
         </>
     );
