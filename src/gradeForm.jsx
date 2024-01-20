@@ -81,6 +81,7 @@ const subjectValues = [
     "ksl"
 ];
 
+const g1 = ["eng", "swa", "math"];
 const g2 = ["bio", "chem", "phy", "gs"];
 const g3 = ["his", "geo", "re"];
 const g4 = ["elec", "cs", "agr", "hsci", "art", "ww", "mw", "bc", "pm", "dd", "avi"];
@@ -227,7 +228,61 @@ const clusters = [
     }
 ];
 
+function calculate_y(data) {
+    let gradesByGroup = {
+        g1: [],
+        g2: [],
+        g3: [],
+        g4: [],
+        g5: [],
+    };
 
+    data.forEach(({ subject, grade }) => {
+        if (g1.includes(subject)) {
+            gradesByGroup.g1.push(grade);
+        } else if (g2.includes(subject)) {
+            gradesByGroup.g2.push(grade);
+        } else if (g3.includes(subject)) {
+            gradesByGroup.g3.push(grade);
+        } else if (g4.includes(subject)) {
+            gradesByGroup.g4.push(grade);
+        } else if (g5.includes(subject)) {
+            gradesByGroup.g5.push(grade);
+        }
+    });
+
+    // Calculate the sum of group 1 grades
+    let y = gradesByGroup.g1.reduce((sum, grade) => sum + grade, 0);
+
+    // Find the two highest scores in Group 2 and add them to y
+    const top2Group2Grades = gradesByGroup.g2.sort((a, b) => b - a).slice(0, 2);
+    y += top2Group2Grades.reduce((sum, grade) => sum + grade, 0);
+
+    // Remove the two highest grades from Group 2
+    gradesByGroup.g2 = gradesByGroup.g2.filter(grade => !top2Group2Grades.includes(grade));
+
+    // Calculate the highest score in Group 3 and add it to yAfterGroup2
+    const highestGroup3Grade = Math.max(...gradesByGroup.g3);
+    y += highestGroup3Grade;
+
+    // Remove the highest grade from Group 3
+    const indexToRemoveGroup3 = gradesByGroup.g3.indexOf(highestGroup3Grade);
+    if (indexToRemoveGroup3 !== -1) {
+        gradesByGroup.g3.splice(indexToRemoveGroup3, 1);
+    }
+
+    // Find the highest score in the remaining subjects (Group II, III, and IV) and add it to yAfterGroup3
+    const remainingSubjectsGrades = [
+        ...gradesByGroup.g2, 
+        ...gradesByGroup.g3, 
+        ...gradesByGroup.g4,
+        ...gradesByGroup.g5
+    ];
+    const highestRemainingGrade = Math.max(...remainingSubjectsGrades);
+    y += highestRemainingGrade;
+
+    return y;
+}
 
 function calculate_x(cluster, selectedSubjectsData) {
     let tempSelectedSubjectsData = [...selectedSubjectsData]; // Create a shallow copy
@@ -291,7 +346,9 @@ export function GradeForm({ onSubmit }) {
 
         // Loop through the clusters array and calculate calculate_x for each cluster
         for (let i = 0; i < clusters.length; i++) {
-            const clusterResult = calculate_x(clusters[i], selectedSubjectsData);
+            const xResult = calculate_x(clusters[i], selectedSubjectsData);
+            const yResult = calculate_y(selectedSubjectsData);
+            let clusterResult = (48*(Math.sqrt((xResult/48)*(yResult/84)))).toFixed(3);
             results.push(clusterResult);
         }
 
