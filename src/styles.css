@@ -18,7 +18,7 @@ body {
     width: 90%;
     margin-left: auto;
     margin-right: auto;
-    padding-bottom: 80px;
+    padding-bottom: 20px;
     /* padding-top: 20px; */
   }
 
@@ -69,9 +69,13 @@ body {
     font-weight: 350;
   }
 
+  .report_title {
+    text-align: center;
+  }
+
   .report_form {
     width: 100%;
-    padding-top: 20px;
+    /* padding-top: 20px; */
     text-align: center;
     font-weight: 350;
   }
@@ -88,6 +92,16 @@ body {
     padding-left: 15px;
     padding-right: 15px;
     width: 90px;
+  }
+
+  .report_description {
+    font-weight: 100;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #email {
+    width: 300px;
   }
 
   #report {
@@ -145,6 +159,7 @@ body {
     margin-left: auto;
     margin-right: auto;
     border-collapse: collapse;
+    margin-bottom: 80px;
   }
 
   th {
@@ -166,5 +181,15 @@ body {
       margin-left: auto;
       margin-right: auto;
       border-collapse: collapse;
+    }
+    
+  }
+
+  @media only screen and (max-width: 513px) {
+    #report {
+      width: 200px;
+    }
+    #email {
+      width: 200px;
     }
   }

@@ -1,6 +1,8 @@
 import { SubjectAndGrade } from "./subjectAndGrade";
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useRef } from 'react';
+import emailjs from '@emailjs/browser';
 
 GradeForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
@@ -359,6 +361,18 @@ export function GradeForm({ onSubmit }) {
         onSubmit(results);
     };
 
+    const form = useRef();
+    const sendEmail = (e) => {
+        e.preventDefault();
+    
+        emailjs.sendForm('service_n1b16q6', 'template_zscajku', form.current, 'Xy0M5cGGk5FH0x9wz')
+          .then((result) => {
+              console.log(result.text);
+          }, (error) => {
+              console.log(error.text);
+          });
+      };
+
     // const handleSubmit = (e) => {
     //     e.preventDefault();
 
@@ -438,15 +452,34 @@ export function GradeForm({ onSubmit }) {
                 <div className="submitbuttonbox">
                     <input type="submit" value="Calculate" id="submitbutton" />
                 </div>
-                <div className="report_form">
+            </form>
+            <form ref={form} onSubmit={sendEmail}>
                 <br />
-                    <label htmlFor="fname" >Report an issue:</label>
+                <div className="report_title" >REPORT AN ISSUE:</div>
+                <div className="report_form">
+                    <p className="report_description">
+                        In case you are having issues with payment or general issues with
+                        the website, please send us your complaint using the from below. Our technical team will 
+                        respond to you via email promptly.
+                        If you had made a payment but you ran into an issue, copy and paste the M-Pesa
+                        message as well and explain the issue you ran into.
+                    </p>
+                    <label htmlFor="email" >Enter your Email address:</label>
+                    <br />
+                    <input type="email" name="from_email" id="email" />
+                    <br />
+                    
+                    <label htmlFor="report" >Describe your issue:</label>
                     <br />
                     <textarea 
-                        type="text" 
+                        name='message'
                         id="report" 
+                        required
                         // value={report}
                     />
+                    <div className="submitbuttonbox">
+                        <input type="submit" value="Send" id="submitbutton" />
+                    </div>
                 </div>
             </form>
         </>
