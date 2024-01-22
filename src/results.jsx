@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
 
 Results.propTypes = {
-    results: PropTypes.array.isRequired,
+    results: PropTypes.array.isRequired
 };
-
 
 
 export function Results({ results }) {

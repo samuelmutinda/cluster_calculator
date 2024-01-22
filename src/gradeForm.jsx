@@ -3,6 +3,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRef } from 'react';
 import emailjs from '@emailjs/browser';
+import { Popup } from "./popup";
 
 GradeForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
@@ -329,7 +330,8 @@ function calculate_x(cluster, selectedSubjectsData) {
 export function GradeForm({ onSubmit }) {
     const [selectedSubjectsData, setSelectedSubjectsData] = useState([]);
     const [mpesaNumber, setMpesaNumber] = useState("");
-
+    const [reportSent, setReportSent] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
     
     const handleSubjectStateChange = (index, selectedSubject, selectedGrade) => {
         const updatedSelectedSubjectsData = [...selectedSubjectsData];
@@ -345,67 +347,37 @@ export function GradeForm({ onSubmit }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setShowPopup(true);
+    };
 
-        // Loop through the clusters array and calculate calculate_x for each cluster
+    const handleConfirmPayment = () => {
         for (let i = 0; i < clusters.length; i++) {
             const xResult = calculate_x(clusters[i], selectedSubjectsData);
             const yResult = calculate_y(selectedSubjectsData);
             let clusterResult = (48*(Math.sqrt((xResult/48)*(yResult/84)))).toFixed(3);
             results.push(clusterResult);
         }
-
-        console.log("Selected Subjects and Grades:", selectedSubjectsData);
-        console.log("M-Pesa Number:", mpesaNumber);
-        console.log("Results:", results);
-
+        setShowPopup(false); 
         onSubmit(results);
     };
+
+    const handleClosePopup = () => {
+        setShowPopup(false); 
+    }
 
     const form = useRef();
     const sendEmail = (e) => {
         e.preventDefault();
-    
+
         emailjs.sendForm('service_n1b16q6', 'template_zscajku', form.current, 'Xy0M5cGGk5FH0x9wz')
-          .then((result) => {
-              console.log(result.text);
-          }, (error) => {
-              console.log(error.text);
-          });
-      };
-
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-
-    //     const groupedSubjects = {
-    //         compulsory: [],
-    //         G2: [],
-    //         G3: [],
-    //         G4: [],
-    //         G5: [],
-    //     };
-
-    //     const categorizeSubject = (subject, grade) => {
-    //         if (["eng", "math", "swa"].includes(subject)) {
-    //             groupedSubjects.compulsory.push({ [subject]: grade });
-    //         } else if (["phy", "bio", "chem"].includes(subject)) {
-    //             groupedSubjects.G2.push({ [subject]: grade });
-    //         } else if (["his", "geo", "re"].includes(subject)) {
-    //             groupedSubjects.G3.push({ [subject]: grade });
-    //         } else if (["hsci", "art", "agr", "cs", "avi", "elec", "pm", "ww"].includes(subject)) {
-    //             groupedSubjects.G4.push({ [subject]: grade });
-    //         } else if (["fre", "ger", "ara", "music", "bs"].includes(subject)) {
-    //             groupedSubjects.G5.push({ [subject]: grade });
-    //         }
-    //     };
-
-    //     selectedSubjectsData.forEach(({ subject, grade }) => {
-    //         categorizeSubject(subject, grade);
-    //     });
-
-    //     console.log("Selected Subjects and Grades:", selectedSubjectsData);
-    //     console.log("Grouped Subjects:", groupedSubjects);
-    //     console.log("M-Pesa Number:", mpesaNumber);
-    // };
+            .then((result) => {
+                console.log(result.text);
+                setReportSent(true); 
+                form.current.reset();
+            }, (error) => {
+                console.log(error.text);
+            });
+    };
 
     return (
         <>
@@ -453,7 +425,10 @@ export function GradeForm({ onSubmit }) {
                     <input type="submit" value="Calculate" id="submitbutton" />
                 </div>
             </form>
+            <Popup trigger={showPopup} onConfirmPayment={handleConfirmPayment} onClose={handleClosePopup}/>
             <form ref={form} onSubmit={sendEmail}>
+                <br />
+                {reportSent && <div style={{ color: 'green', textAlign: 'center'}}>REPORT SENT!</div>}
                 <br />
                 <div className="report_title" >REPORT AN ISSUE:</div>
                 <div className="report_form">
