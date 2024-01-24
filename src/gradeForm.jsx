@@ -1,3 +1,5 @@
+// WEE MITCH, GO TO LINE 333. ALL THE CODE IS THERE
+
 import { SubjectAndGrade } from "./subjectAndGrade";
 import { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -254,27 +256,16 @@ function calculate_y(data) {
         }
     });
 
-    // Calculate the sum of group 1 grades
     let y = gradesByGroup.g1.reduce((sum, grade) => sum + grade, 0);
-
-    // Find the two highest scores in Group 2 and add them to y
     const top2Group2Grades = gradesByGroup.g2.sort((a, b) => b - a).slice(0, 2);
     y += top2Group2Grades.reduce((sum, grade) => sum + grade, 0);
-
-    // Remove the two highest grades from Group 2
     gradesByGroup.g2 = gradesByGroup.g2.filter(grade => !top2Group2Grades.includes(grade));
-
-    // Calculate the highest score in Group 3 and add it to yAfterGroup2
     const highestGroup3Grade = Math.max(...gradesByGroup.g3);
     y += highestGroup3Grade;
-
-    // Remove the highest grade from Group 3
     const indexToRemoveGroup3 = gradesByGroup.g3.indexOf(highestGroup3Grade);
     if (indexToRemoveGroup3 !== -1) {
         gradesByGroup.g3.splice(indexToRemoveGroup3, 1);
     }
-
-    // Find the highest score in the remaining subjects (Group II, III, and IV) and add it to yAfterGroup3
     const remainingSubjectsGrades = [
         ...gradesByGroup.g2, 
         ...gradesByGroup.g3, 
@@ -288,38 +279,27 @@ function calculate_y(data) {
 }
 
 function calculate_x(cluster, selectedSubjectsData) {
-    let tempSelectedSubjectsData = [...selectedSubjectsData]; // Create a shallow copy
-
+    let tempSelectedSubjectsData = [...selectedSubjectsData]; 
     let x = 0;
-
-    // Iterate over each subject group in the cluster
     for (const group in cluster) {
         if (Object.prototype.hasOwnProperty.call(cluster, group)) {
             const subjectsInGroup = cluster[group];
-
-            // Find the highest score for each subject in the group
             const highestScoreData = subjectsInGroup.reduce((maxScoreData, subject) => {
-                // Find the grade for the subject in selectedSubjectsData
                 const subjectData = tempSelectedSubjectsData.find(data => data.subject === subject);
                 const subjectScore = subjectData ? subjectData.grade : 0;
 
-                // If the current subject has a higher score, update maxScoreData
                 if (subjectScore > maxScoreData.grade) {
                     maxScoreData = { subject, grade: subjectScore };
                 }
 
                 return maxScoreData;
             }, { subject: null, grade: 0 });
-
-            // Add the highest score to the total
             x += highestScoreData.grade;
 
-            // Remove the subject with the highest score from tempSelectedSubjectsData
             const indexToRemove = tempSelectedSubjectsData.findIndex(data => data.subject === highestScoreData.subject);
             if (indexToRemove !== -1) {
                 tempSelectedSubjectsData.splice(indexToRemove, 1);
             }
-            // console.log(tempSelectedSubjectsData);
         }
     }
 
@@ -350,14 +330,19 @@ export function GradeForm({ onSubmit }) {
         setShowPopup(true);
     };
 
+    // THIS FUNCTION IS CALLED WHEN THE BUTTON TO CONFIRM PAYMENT IS CALLED
     const handleConfirmPayment = () => {
+        // WHEN THE FUNCTION IS CALLED, IT FIRST CALCULATES THE SCORES
         for (let i = 0; i < clusters.length; i++) {
             const xResult = calculate_x(clusters[i], selectedSubjectsData);
             const yResult = calculate_y(selectedSubjectsData);
             let clusterResult = (48*(Math.sqrt((xResult/48)*(yResult/84)))).toFixed(3);
             results.push(clusterResult);
         }
+        // THEN IT CLOSES THE POPUP
         setShowPopup(false); 
+        // THEN IT REDIRECTS TO THE RESULTS PAGE. MAKE CHANGES HERE
+        // THE onSubmit FUNCTION SHOULD ONLY BE CALLED IF THE PAYMENT HAS BEEN MADE
         onSubmit(results);
     };
 
@@ -450,7 +435,6 @@ export function GradeForm({ onSubmit }) {
                         name='message'
                         id="report" 
                         required
-                        // value={report}
                     />
                     <div className="submitbuttonbox">
                         <input type="submit" value="Send" id="submitbutton" />

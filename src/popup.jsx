@@ -13,14 +13,17 @@ export function Popup({ trigger, onConfirmPayment, onClose }) {
                     <div className='popuptitle'>Confirm M-Pesa Payment</div>
                     <p className='popupdescription'>
                         If M-Pesa popup does not appear on your phone, 
-                        go to your M-Pesa menu and pay KES 50 to Till Number: XXX
+                        go to your M-Pesa menu and pay KES 50 to Till Number: 4133230 - samuel mutinda kyungu
                     </p>
                     <p className='popupdescription2'>
                         When you have received the M-Pesa transaction message,
                         click Confirm Payment below
                     </p>
                     <button className="closebtn" onClick={onClose}>Close</button>
+
+                    {/* THIS IS THE CONFIRM PAYMENT BUTTON */}
                     <div className='confirmbtndiv'>
+                        {/* WHEN THE BUTTON IS CLICKED, THE onConfirmPayment FUNCTION IS CALLED */}
                         <button className='confirmbtn' onClick={onConfirmPayment}>Confirm Payment</button>
                     </div>
                 </div>
