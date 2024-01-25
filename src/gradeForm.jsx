@@ -1,11 +1,10 @@
-// WEE MITCH, GO TO LINE 333. ALL THE CODE IS THERE
-
 import { SubjectAndGrade } from "./subjectAndGrade";
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRef } from 'react';
 import emailjs from '@emailjs/browser';
 import { Popup } from "./popup";
+import axios from 'axios';
 
 GradeForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
@@ -312,6 +311,7 @@ export function GradeForm({ onSubmit }) {
     const [mpesaNumber, setMpesaNumber] = useState("");
     const [reportSent, setReportSent] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
+    const [stkPushResult, setStkPushResult] = useState(null);
     
     const handleSubjectStateChange = (index, selectedSubject, selectedGrade) => {
         const updatedSelectedSubjectsData = [...selectedSubjectsData];
@@ -330,20 +330,48 @@ export function GradeForm({ onSubmit }) {
         setShowPopup(true);
     };
 
+    const performStkPush = async (mpesaNumber) => {
+        try {
+            const response = await axios.post('https://tinypesa.com/api/v1/express/initialize', {
+                amount: 50,  // Replace with the actual amount
+                msisdn: mpesaNumber,
+                account_no: '1270359185',  // Replace with the actual account number
+            }, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Apikey': '65b23365e9f77',  // Replace with the actual API key
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            return response.data;
+        } catch (error) {
+            console.error('Error performing STK push:', error);
+            // Handle error, maybe show a message to the user
+            return { success: false, error: 'Failed to perform STK push' };
+        }
+    };
+        
     // THIS FUNCTION IS CALLED WHEN THE BUTTON TO CONFIRM PAYMENT IS CALLED
-    const handleConfirmPayment = () => {
-        // WHEN THE FUNCTION IS CALLED, IT FIRST CALCULATES THE SCORES
+    const handleConfirmPayment = async () => {
+        // Calculate scores
         for (let i = 0; i < clusters.length; i++) {
             const xResult = calculate_x(clusters[i], selectedSubjectsData);
             const yResult = calculate_y(selectedSubjectsData);
-            let clusterResult = (48*(Math.sqrt((xResult/48)*(yResult/84)))).toFixed(3);
+            let clusterResult = (48 * (Math.sqrt((xResult / 48) * (yResult / 84)))).toFixed(3);
             results.push(clusterResult);
         }
-        // THEN IT CLOSES THE POPUP
-        setShowPopup(false); 
-        // THEN IT REDIRECTS TO THE RESULTS PAGE. MAKE CHANGES HERE
-        // THE onSubmit FUNCTION SHOULD ONLY BE CALLED IF THE PAYMENT HAS BEEN MADE
-        onSubmit(results);
+
+        // Perform STK push
+        const stkPushResponse = await performStkPush(mpesaNumber);
+        setStkPushResult(stkPushResponse);
+
+        // If STK push is successful, submit results
+        if (stkPushResponse && stkPushResponse.success) {
+            setShowPopup(false);
+            onSubmit(results);
+        }
+        // Handle error cases if needed
     };
 
     const handleClosePopup = () => {
