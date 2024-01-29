@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { useRef } from 'react';
 import emailjs from '@emailjs/browser';
 import { Popup } from "./popup";
+import { useEffect } from 'react';
 
 GradeForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
@@ -232,6 +233,12 @@ const clusters = [
     }
 ];
 
+/* tiny pesa api requirements*/
+const API_KEY = 'QBPIA8z6whK';
+const API_URL = '/api/v1/express/initialize';
+const ACC_NUMBER = '1270359185';
+const AMOUNT = '1';
+
 function calculate_y(data) {
     let gradesByGroup = {
         g1: [],
@@ -311,6 +318,12 @@ export function GradeForm({ onSubmit }) {
     const [mpesaNumber, setMpesaNumber] = useState("");
     const [reportSent, setReportSent] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
+    const [paymentConfirmed, setPaymentConfirmed] = useState(false);
+    // Reset paymentConfirmed to false when the component mounts
+    useEffect(() => {
+        setPaymentConfirmed(false);
+    }, []);
+    const results = [];
     
     const handleSubjectStateChange = (index, selectedSubject, selectedGrade) => {
         const updatedSelectedSubjectsData = [...selectedSubjectsData];
@@ -322,11 +335,40 @@ export function GradeForm({ onSubmit }) {
         setMpesaNumber(e.target.value);
     };
 
-    const results = [];
+    async function sendStkRequest() {
+        let bodyString = "amount="+AMOUNT+"&msisdn="+mpesaNumber+"&account_no="+ACC_NUMBER;
+        try {
+            console.log(bodyString);
+            fetch( API_URL, {
+              method: 'POST',
+              body: bodyString,
+              headers: {
+                Apikey: API_KEY,
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            })
+              .then((response) => {
+                console.log(response.status);
+                if (response.ok) {
+                    setPaymentConfirmed(true);
+                  } else {
+                    console.error('Error:', response.statusText);
+                  }
+              })
 
-    const handleSubmit = (e) => {
+          } catch (error) {
+            console.error('Fetch error:', error);
+            alert('Oops, an error occured, try again');
+          }
+             
+    }
+
+    const handleSubmit = async (e) => {
+        console.log(paymentConfirmed)
         e.preventDefault();
         setShowPopup(true);
+        /* send stk push request*/
+        await sendStkRequest();
     };
         
     // THIS FUNCTION IS CALLED WHEN THE BUTTON TO CONFIRM PAYMENT IS CALLED
@@ -338,12 +380,19 @@ export function GradeForm({ onSubmit }) {
             let clusterResult = (48*(Math.sqrt((xResult/48)*(yResult/84)))).toFixed(3);
             results.push(clusterResult);
         }
-        // THEN IT CLOSES THE POPUP
+        console.log(paymentConfirmed);
+        // paymentConfirmed ? submitResults() : null;
+        if (paymentConfirmed){
+            submitResults();
+        }
+    };
+
+    const submitResults = () => {
         setShowPopup(false); 
         // THEN IT REDIRECTS TO THE RESULTS PAGE. MAKE CHANGES HERE
         // THE onSubmit FUNCTION SHOULD ONLY BE CALLED IF THE PAYMENT HAS BEEN MADE
         onSubmit(results);
-    };
+    }
 
     const handleClosePopup = () => {
         setShowPopup(false); 
