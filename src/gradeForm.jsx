@@ -319,10 +319,6 @@ export function GradeForm({ onSubmit }) {
     const [reportSent, setReportSent] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [paymentConfirmed, setPaymentConfirmed] = useState(false);
-    // Reset paymentConfirmed to false when the component mounts
-    useEffect(() => {
-        setPaymentConfirmed(false);
-    }, []);
     const results = [];
     
     const handleSubjectStateChange = (index, selectedSubject, selectedGrade) => {
@@ -381,10 +377,7 @@ export function GradeForm({ onSubmit }) {
             results.push(clusterResult);
         }
         console.log(paymentConfirmed);
-        // paymentConfirmed ? submitResults() : null;
-        if (paymentConfirmed){
-            submitResults();
-        }
+        paymentConfirmed ? submitResults() : null;
     };
 
     const submitResults = () => {
