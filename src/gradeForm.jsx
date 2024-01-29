@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { useRef } from 'react';
 import emailjs from '@emailjs/browser';
 import { Popup } from "./popup";
-import { useEffect } from 'react';
 
 GradeForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
@@ -235,8 +234,8 @@ const clusters = [
 
 /* tiny pesa api requirements*/
 const API_KEY = 'QBPIA8z6whK';
-const API_URL = 'tinypesa.com/api/v1/express/initialize';
-const ACC_NUMBER = '1270359185';
+const API_URL = '/api/v1/express/initialize';
+const ACC_NUMBER = '200';
 const AMOUNT = '1';
 
 function calculate_y(data) {
