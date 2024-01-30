@@ -337,7 +337,6 @@ export function GradeForm({ onSubmit }) {
             console.log(bodyString);
             fetch( API_URL, {
               method: 'POST',
-              mode: "no-cors",
               body: bodyString,
               headers: {
                 Apikey: API_KEY,
