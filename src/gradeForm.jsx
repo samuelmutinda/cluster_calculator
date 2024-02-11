@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { useRef } from 'react';
 import emailjs from '@emailjs/browser';
 import { Popup } from "./popup";
+import axios from "axios";
 
 GradeForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
@@ -234,7 +235,7 @@ const clusters = [
 
 /* tiny pesa api requirements*/
 
-const API_URL = "https://tinypesa.com/api/v1/express/initialize";
+const API_URL = "/api/v1/express/initialize";
 const API_KEY = 'QBPIA8z6whK';
 const ACC_NUMBER = '200';
 const AMOUNT = '1';
@@ -334,7 +335,7 @@ export function GradeForm({ onSubmit }) {
     async function sendStkRequest() {
         let bodyString = "amount="+AMOUNT+"&msisdn="+mpesaNumber+"&account_no="+ACC_NUMBER;
         try {
-            console.log(bodyString);
+            // console.log(bodyString);
             fetch( API_URL, {
               method: 'POST',
               body: bodyString,
@@ -344,7 +345,7 @@ export function GradeForm({ onSubmit }) {
             },
             })
               .then((response) => {
-                console.log(response.status);
+                console.log(response);
                 if (response.ok) {
                     setPaymentConfirmed(true);
                   } else {
@@ -368,16 +369,35 @@ export function GradeForm({ onSubmit }) {
     };
         
     // THIS FUNCTION IS CALLED WHEN THE BUTTON TO CONFIRM PAYMENT IS CALLED
-    const handleConfirmPayment = () => {
-        // WHEN THE FUNCTION IS CALLED, IT FIRST CALCULATES THE SCORES
-        for (let i = 0; i < clusters.length; i++) {
-            const xResult = calculate_x(clusters[i], selectedSubjectsData);
-            const yResult = calculate_y(selectedSubjectsData);
-            let clusterResult = (48*(Math.sqrt((xResult/48)*(yResult/84)))).toFixed(3);
-            results.push(clusterResult);
+    const handleConfirmPayment = async () => {
+        // WHEN THE FUNCTION IS CALLED, IT FIRST CHECKS IF THE PAYMENT HAS BEEN CONFIRMED
+        
+        try {
+            const {data} = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/confirm-mpesa-payment`, {
+                Msisdn: mpesaNumber
+            }, {
+                headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            if(data.confirmed){
+                // when the payment has been confirmed it then calculates the results
+                for (let i = 0; i < clusters.length; i++) {
+                    const xResult = calculate_x(clusters[i], selectedSubjectsData);
+                    const yResult = calculate_y(selectedSubjectsData);
+                    let clusterResult = (48*(Math.sqrt((xResult/48)*(yResult/84)))).toFixed(3);
+                    results.push(clusterResult);
+                }
+                console.log(paymentConfirmed);
+                paymentConfirmed ? submitResults() : null;
+            }else{
+                // This means that the payment has not been made
+                console.log(data.none);
+            }
+            
+        } catch (error) {
+            console.log(error);
         }
-        console.log(paymentConfirmed);
-        paymentConfirmed ? submitResults() : null;
     };
 
     const submitResults = () => {

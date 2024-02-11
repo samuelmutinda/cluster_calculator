@@ -36,6 +36,13 @@ body {
     text-align: center;
   }
 
+  .downloadstitle {
+    color: #fff;
+    font-size: 25px;
+    font-weight: 100;
+    text-align: center;
+  }
+
   .formdescription {
     padding-bottom: 5px;
     text-align: center;
@@ -214,6 +221,35 @@ body {
     border-radius: 10px;
   }
 
+  .downloadbtndiv {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+  }
+
+  .download_description {
+    text-align: center;
+  }
+
+  .download_description_p {
+    font-weight: 100;
+    width: 70%;
+    display: inline-block;
+  }
+
+  .downloadbtn {
+    color: #fff;
+    padding: 10px;
+    width: 150px;
+    cursor: pointer;
+    font-weight: 100;
+    background-color: #404552;
+    border: none;
+    border-radius: 10px;
+  }
+
   #submitbutton {
     width: 120px;
     cursor: pointer;
@@ -227,6 +263,7 @@ body {
     margin-right: auto;
     border-collapse: collapse;
     margin-bottom: 80px;
+    margin-top: 30px;
   }
 
   th {
