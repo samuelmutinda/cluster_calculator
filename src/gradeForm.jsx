@@ -340,7 +340,8 @@ export function GradeForm({ onSubmit }) {
             }, {
                 headers: {
                     Apikey: API_KEY,
-                    Accept: 'application/json'
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 }
             })
             if(data){
@@ -364,7 +365,7 @@ export function GradeForm({ onSubmit }) {
                 Msisdn: mpesaNumber
             }, {
                 headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 }
             })
             if(data.confirmed){
