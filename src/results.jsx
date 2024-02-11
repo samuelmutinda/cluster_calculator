@@ -9,7 +9,7 @@ Results.propTypes = {
 
 export function Results({ results }) {
     const generatePDF = () => {
-        const doc = new jsPDF();
+        let doc = new jsPDF();
         doc.text("Summary of Cluster Points", 10, 10);
         let y = 20;
         results.forEach((points, index) => {
