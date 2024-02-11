@@ -334,8 +334,7 @@ export function GradeForm({ onSubmit }) {
         try {
             const {data} = await axios.post("https://tinypesa.com/api/v1/express/initialize", {
                 amount: AMOUNT,
-                msisdn: mpesaNumber,
-                account_no: ACC_NUMBER
+                msisdn: mpesaNumber
             }, {
                 headers: {
                     Apikey: API_KEY,
