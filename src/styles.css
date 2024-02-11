@@ -165,7 +165,31 @@ body {
     background-color: #2a2f3b;
     border-radius: 15px;
   }
-    
+
+  .loader {
+    margin: auto;
+    width: 5vw;
+    height: 5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .loader::after{
+    content: "";
+    width: 20px;
+    height: 20px;
+    border: 5px solid #404552;
+    border-top-color: #009578;
+    border-radius: 50%;
+    animation: loading 0.75s ease infinite;
+  } 
+
+  @keyframes loading {
+    from { transform: rotate(0turn) }
+    to { transform: rotate(1turn) }
+  }
+
   .popup_inner .closebtn {
     position: absolute;
     top: 16px;
