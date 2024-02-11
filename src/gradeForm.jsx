@@ -234,11 +234,10 @@ const clusters = [
 
 /* tiny pesa api requirements*/
 
-const API_URL = "/api/v1/express/initialize";
+const API_URL = "https://tinypesa.com/api/v1/express/initialize";
 const API_KEY = 'QBPIA8z6whK';
 const ACC_NUMBER = '200';
-const AMOUNT = '1';
-
+const AMOUNT = '50';
 function calculate_y(data) {
     let gradesByGroup = {
         g1: [],
@@ -318,7 +317,7 @@ export function GradeForm({ onSubmit }) {
     const [mpesaNumber, setMpesaNumber] = useState("");
     const [reportSent, setReportSent] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
-    const [paymentConfirmed, setPaymentConfirmed] = useState(false);
+    // const [paymentConfirmed, setPaymentConfirmed] = useState(false);
     let results = [];
     
     const handleSubjectStateChange = (index, selectedSubject, selectedGrade) => {
@@ -332,42 +331,31 @@ export function GradeForm({ onSubmit }) {
     };
 
     async function sendStkRequest() {
-        let bodyString = "amount="+AMOUNT+"&msisdn="+mpesaNumber+"&account_no="+ACC_NUMBER;
         try {
-            // console.log(bodyString);
-            fetch( API_URL, {
-              method: 'POST',
-              body: bodyString,
-              headers: {
-                Apikey: API_KEY,
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
+            const {data} = await axios.post(API_URL, {
+                Msisdn: mpesaNumber,
+                amount: AMOUNT,
+                msisdn: mpesaNumber,
+                account_no: ACC_NUMBER
+            }, {
+                headers: {
+                    Apikey: API_KEY,
+                    Accept: 'application/json'
+                }
             })
-              .then((response) => {
-                console.log(response);
-                if (response.ok) {
-                    setPaymentConfirmed(true);
-                  } else {
-                    console.error('Error:', response.statusText);
-                  }
-              })
-
-          } catch (error) {
-            console.error('Fetch error:', error);
-            alert('Oops, an error occured, try again');
-          }
-             
+            if(data){
+                // when the payment has been confirmed it then calculates the results
+                console.log(data);
+            }else{
+                // This means that the payment has not been made
+                console.log("There is no data");
+            }
+            
+        } catch (error) {
+            console.log(error);
+        }        
     }
 
-    const handleSubmit = async (e) => {
-        console.log(paymentConfirmed)
-        e.preventDefault();
-        setShowPopup(true);
-        /* send stk push request*/
-        await sendStkRequest();
-    };
-        
-    // THIS FUNCTION IS CALLED WHEN THE BUTTON TO CONFIRM PAYMENT IS CALLED
     const handleConfirmPayment = async () => {
         // WHEN THE FUNCTION IS CALLED, IT FIRST CHECKS IF THE PAYMENT HAS BEEN CONFIRMED
         
@@ -388,8 +376,7 @@ export function GradeForm({ onSubmit }) {
                     let clusterResult = (48*(Math.sqrt((xResult/48)*(yResult/84)))).toFixed(3);
                     results.push(clusterResult);
                 }
-                console.log(paymentConfirmed);
-                paymentConfirmed ? submitResults() : null;
+                submitResults()
             }else{
                 // This means that the payment has not been made
                 console.log(data.none);
@@ -398,6 +385,13 @@ export function GradeForm({ onSubmit }) {
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setShowPopup(true);
+        /* send stk push request*/
+        await sendStkRequest();
     };
 
     const submitResults = () => {
