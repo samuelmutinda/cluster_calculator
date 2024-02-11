@@ -337,8 +337,8 @@ export function GradeForm({ onSubmit }) {
                 msisdn: mpesaNumber
             }, {
                 headers: {
-                    Apikey: API_KEY,
-                    'Accept': 'application/json',
+                    // Apikey: API_KEY,
+                    // 'Accept': 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             })
