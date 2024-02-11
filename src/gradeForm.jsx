@@ -234,7 +234,7 @@ const clusters = [
 
 /* tiny pesa api requirements*/
 
-const API_URL = "https://tinypesa.com/api/v1/express/initialize";
+const API_URL = "/api/v1/express/initialize";
 const API_KEY = 'QBPIA8z6whK';
 const ACC_NUMBER = '200';
 const AMOUNT = '50';
