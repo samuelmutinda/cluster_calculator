@@ -1,4 +1,3 @@
-// JUMP TO LINE 331
 import { SubjectAndGrade } from "./subjectAndGrade";
 import { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -320,7 +319,7 @@ export function GradeForm({ onSubmit }) {
     const [reportSent, setReportSent] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [paymentConfirmed, setPaymentConfirmed] = useState(false);
-    const results = [];
+    let results = [];
     
     const handleSubjectStateChange = (index, selectedSubject, selectedGrade) => {
         const updatedSelectedSubjectsData = [...selectedSubjectsData];
@@ -382,6 +381,7 @@ export function GradeForm({ onSubmit }) {
             })
             if(data.confirmed){
                 // when the payment has been confirmed it then calculates the results
+                results = [];
                 for (let i = 0; i < clusters.length; i++) {
                     const xResult = calculate_x(clusters[i], selectedSubjectsData);
                     const yResult = calculate_y(selectedSubjectsData);
