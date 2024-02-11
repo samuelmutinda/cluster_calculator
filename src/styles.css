@@ -45,7 +45,11 @@ body {
 
   .formdescription {
     padding-bottom: 5px;
+    font-weight: 100;
     text-align: center;
+  }
+  .warning {
+    font-weight: 400;
   }
 
 .subjectandgrade {

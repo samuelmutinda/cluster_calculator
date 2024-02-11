@@ -7,12 +7,14 @@ SubjectAndGrade.propTypes = {
     subjects: PropTypes.array.isRequired,
     onSubjectStateChange: PropTypes.func.isRequired,
     selectedSubjects: PropTypes.array.isRequired,
-    subjectValues: PropTypes.array.isRequired
+    subjectValues: PropTypes.array.isRequired,
+    isRequired: PropTypes.bool.isRequired
 };
 
 export function SubjectAndGrade({
     subjectNumber,
     gradeNumber,
+    isRequired,
     subjects,
     onSubjectStateChange,
     selectedSubjects,
@@ -58,7 +60,7 @@ export function SubjectAndGrade({
                 <select
                     name=""
                     id="subject-selection"
-                    required
+                    required={isRequired}
                     data-placeholder="Select Subject"
                     onChange={handleSubjectChange}
                 >
@@ -90,7 +92,7 @@ export function SubjectAndGrade({
                 <select
                     name=""
                     id="grade-selection"
-                    required
+                    required={isRequired}
                     data-placeholder="Select Grade"
                     onChange={handleGradeChange}
                 >

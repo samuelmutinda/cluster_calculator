@@ -12,14 +12,14 @@ GradeForm.propTypes = {
 };
 
 const subjectsData = [
-    { subjectNumber: 'Subject 1', gradeNumber: 'Grade for subject 1' },
-    { subjectNumber: 'Subject 2', gradeNumber: 'Grade for subject 2' },
-    { subjectNumber: 'Subject 3', gradeNumber: 'Grade for subject 3' },
-    { subjectNumber: 'Subject 4', gradeNumber: 'Grade for subject 4' },
-    { subjectNumber: 'Subject 5', gradeNumber: 'Grade for subject 5' },
-    { subjectNumber: 'Subject 6', gradeNumber: 'Grade for subject 6' },
-    { subjectNumber: 'Subject 7', gradeNumber: 'Grade for subject 7' },
-    { subjectNumber: 'Subject 8', gradeNumber: 'Grade for subject 8' }
+    { subjectNumber: 'Subject 1', gradeNumber: 'Grade for subject 1', isRequired: true },
+    { subjectNumber: 'Subject 2', gradeNumber: 'Grade for subject 2', isRequired: true },
+    { subjectNumber: 'Subject 3', gradeNumber: 'Grade for subject 3', isRequired: true },
+    { subjectNumber: 'Subject 4', gradeNumber: 'Grade for subject 4', isRequired: true },
+    { subjectNumber: 'Subject 5', gradeNumber: 'Grade for subject 5', isRequired: true },
+    { subjectNumber: 'Subject 6', gradeNumber: 'Grade for subject 6', isRequired: true },
+    { subjectNumber: 'Subject 7', gradeNumber: 'Grade for subject 7', isRequired: true },
+    { subjectNumber: 'Subject 8', gradeNumber: 'Grade for subject 8', isRequired: false }
 ];
 
 const subjects = [
@@ -438,6 +438,9 @@ export function GradeForm({ onSubmit }) {
                     <p>Select the subjects and their corresponding grades</p>
                 </div>
                 <div className="formdescription">
+                    <p className="warning">
+                        IF YOU SAT FOR 7 SUBJECTS, LEAVE SUBJECT 8 AND GRADE FOR SUBJECT 8 BLANK.
+                    </p>
                     <p>
                         You will be charged a service fee of KES 50. Please enter your M-Pesa number 
                         after entering your grades. Once you click `calculate`, you will be prompted to confirm 
