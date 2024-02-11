@@ -333,7 +333,6 @@ export function GradeForm({ onSubmit }) {
     async function sendStkRequest() {
         try {
             const {data} = await axios.post("https://tinypesa.com/api/v1/express/initialize", {
-                Msisdn: mpesaNumber,
                 amount: AMOUNT,
                 msisdn: mpesaNumber,
                 account_no: ACC_NUMBER
