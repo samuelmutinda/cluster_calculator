@@ -117,18 +117,6 @@ const clusters = [
         subject4: [...g2, ...g3, ...g4, ...g5]
     },
     {
-        subject1: ["eng", "swa"],
-        subject2: ["bio", "gs"],
-        subject3: [...g3],
-        subject4: ["math", ...g2, ...g3, ...g4, ...g5]
-    },
-    {
-        subject1: ["swa"],
-        subject2: ["eng", "math", ...g2],
-        subject3: [...g3],
-        subject4: [...g2, ...g3, ...g4, ...g5]
-    },
-    {
         subject1: ["math"],
         subject2: ["phy"],
         subject3: ["chem"],
@@ -337,8 +325,9 @@ export function GradeForm({ onSubmit }) {
                 msisdn: mpesaNumber
             }, {
                 headers: {
-                    // Apikey: API_KEY,
-                    // 'Accept': 'application/json',
+                    Apikey: API_KEY,
+                    'Accept': 'application/json',
+                    'Access-Control-Allow-Origin' : '*',
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             })
