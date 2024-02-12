@@ -328,7 +328,9 @@ export function GradeForm({ onSubmit }) {
                     Apikey: API_KEY,
                     'Accept': 'application/json',
                     'Access-Control-Allow-Origin' : '*',
-                    'Content-Type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS',
+                    'Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token'
                 }
             })
             if(data){
