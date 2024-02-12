@@ -329,8 +329,8 @@ export function GradeForm({ onSubmit }) {
                     'Accept': 'application/json',
                     'Access-Control-Allow-Origin' : '*',
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS',
-                    'Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token'
+                    'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
                 }
             })
             if(data){
