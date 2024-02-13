@@ -189,13 +189,7 @@ const clusters = [
         subject4: [...g2, ...g3, ...g4, ...g5]
     },
     {
-        subject1: ["fre"],
-        subject2: ["eng", "swa"],
-        subject3: ["math", ...g2, ...g3],
-        subject4: [...g2, ...g3, ...g4, ...g5]
-    },
-    {
-        subject1: ["ger"],
+        subject1: ["fre", "ger"],
         subject2: ["eng", "swa"],
         subject3: ["math", ...g2, ...g3],
         subject4: [...g2, ...g3, ...g4, ...g5]
@@ -222,9 +216,9 @@ const clusters = [
 
 /* tiny pesa api requirements*/
 
-const API_URL = "/api/v1/express/initialize";
+// const API_URL = "/api/v1/express/initialize";
 const API_KEY = 'QBPIA8z6whK';
-const ACC_NUMBER = '200';
+// const ACC_NUMBER = '200';
 const AMOUNT = '50';
 function calculate_y(data) {
     let gradesByGroup = {
@@ -329,8 +323,6 @@ export function GradeForm({ onSubmit }) {
                     'Accept': 'application/json',
                     'Access-Control-Allow-Origin' : '*',
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
                 }
             })
             if(data){
