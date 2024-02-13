@@ -296,7 +296,7 @@ function calculate_x(cluster, selectedSubjectsData) {
 
 export function GradeForm({ onSubmit }) {
     const [selectedSubjectsData, setSelectedSubjectsData] = useState([]);
-    const [mpesaNumber, setMpesaNumber] = useState("");
+    const [customerEmail, setCustomerEmail] = useState("");
     const [reportSent, setReportSent] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     // const [paymentConfirmed, setPaymentConfirmed] = useState(false);
@@ -308,15 +308,14 @@ export function GradeForm({ onSubmit }) {
         setSelectedSubjectsData(updatedSelectedSubjectsData);
     };
 
-    const handleMpesaChange = (e) => {
-        setMpesaNumber(e.target.value);
+    const handleCustomerEmailChange = (e) => {
+        setCustomerEmail(e.target.value);
     };
 
     async function sendStkRequest() {
         try {
             const {data} = await axios.post("https://tinypesa.com/api/v1/express/initialize", {
                 amount: AMOUNT,
-                msisdn: mpesaNumber
             }, {
                 headers: {
                     Apikey: API_KEY,
@@ -343,7 +342,7 @@ export function GradeForm({ onSubmit }) {
         
         try {
             const {data} = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/confirm-mpesa-payment`, {
-                Msisdn: mpesaNumber
+                // Msisdn: mpesaNumber
             }, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -448,14 +447,14 @@ export function GradeForm({ onSubmit }) {
                     />
                 ))}
 
-                <div className="mpesaNumber">
-                    <label htmlFor="fname" >Enter your M-Pesa Number:</label>
+                <div className="customerEmail">
+                    <label>Enter your Email. It will be used to send a Digital receipt.</label>
                     <br />
                     <input 
                         type="text" 
-                        id="mpesa" 
-                        value={mpesaNumber}
-                        onChange={handleMpesaChange}
+                        id="customerEmailnput" 
+                        value={customerEmail}
+                        onChange={handleCustomerEmailChange}
                         required 
                     />
                 </div>
