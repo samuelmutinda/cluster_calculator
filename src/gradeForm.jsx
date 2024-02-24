@@ -5,6 +5,18 @@ import { useRef } from 'react';
 import emailjs from '@emailjs/browser';
 import { Popup } from "./popup";
 import axios from "axios";
+import PaystackPop from '@paystack/inline-js';
+
+function dec2hex (dec) {
+    return dec.toString(16).padStart(2, "0")
+}
+  
+// generateId :: Integer -> String
+function generateId (len) {
+    var arr = new Uint8Array((len || 40) / 2)
+    window.crypto.getRandomValues(arr)
+    return Array.from(arr, dec2hex).join('')
+}
 
 GradeForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
@@ -214,12 +226,6 @@ const clusters = [
     }
 ];
 
-/* tiny pesa api requirements*/
-
-// const API_URL = "/api/v1/express/initialize";
-const API_KEY = 'QBPIA8z6whK';
-// const ACC_NUMBER = '200';
-const AMOUNT = '50';
 function calculate_y(data) {
     let gradesByGroup = {
         g1: [],
@@ -299,6 +305,7 @@ export function GradeForm({ onSubmit }) {
     const [customerEmail, setCustomerEmail] = useState("");
     const [reportSent, setReportSent] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
+    const [reference, setReference] = useState("")
     // const [paymentConfirmed, setPaymentConfirmed] = useState(false);
     let results = [];
     
@@ -312,67 +319,61 @@ export function GradeForm({ onSubmit }) {
         setCustomerEmail(e.target.value);
     };
 
-    async function sendStkRequest() {
+
+
+    const handleConfirmPayment = async () => {
+        // WHEN THE FUNCTION IS CALLED, IT FIRST CHECKS IF THE PAYMENT HAS BEEN CONFIRMED
         try {
-            const {data} = await axios.post("https://tinypesa.com/api/v1/express/initialize", {
-                amount: AMOUNT,
-            }, {
+            const {data} = await axios.get(`https://api.paystack.co/transaction/verify/${reference}`, {
                 headers: {
-                    Apikey: API_KEY,
-                    'Accept': 'application/json',
-                    'Access-Control-Allow-Origin' : '*',
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    Authorization: `Bearer ${import.meta.env.VITE_LIVE_SECRET_KEY}`,
+                    'Content-Type': 'application/json',
                 }
             })
             if(data){
                 // when the payment has been confirmed it then calculates the results
-                console.log(data);
+                if(data.status == true){
+                    console.log(data.message)
+                    results = [];
+                    for (let i = 0; i < clusters.length; i++) {
+                        const xResult = calculate_x(clusters[i], selectedSubjectsData);
+                        const yResult = calculate_y(selectedSubjectsData);
+                        let clusterResult = (48*(Math.sqrt((xResult/48)*(yResult/84)))).toFixed(3);
+                        results.push(clusterResult);
+                    }
+                    submitResults()
+                }
             }else{
                 // This means that the payment has not been made
                 console.log("There is no data");
             }
             
         } catch (error) {
-            console.log(error);
-        }        
-    }
-
-    const handleConfirmPayment = async () => {
-        // WHEN THE FUNCTION IS CALLED, IT FIRST CHECKS IF THE PAYMENT HAS BEEN CONFIRMED
-        
-        try {
-            const {data} = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/confirm-mpesa-payment`, {
-                // Msisdn: mpesaNumber
-            }, {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            })
-            if(data.confirmed){
-                // when the payment has been confirmed it then calculates the results
-                results = [];
-                for (let i = 0; i < clusters.length; i++) {
-                    const xResult = calculate_x(clusters[i], selectedSubjectsData);
-                    const yResult = calculate_y(selectedSubjectsData);
-                    let clusterResult = (48*(Math.sqrt((xResult/48)*(yResult/84)))).toFixed(3);
-                    results.push(clusterResult);
-                }
-                submitResults()
-            }else{
-                // This means that the payment has not been made
-                console.log(data.none);
-            }
-            
-        } catch (error) {
-            console.log(error);
-        }
+            console.log(error.response);
+        }  
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setShowPopup(true);
-        /* send stk push request*/
-        await sendStkRequest();
+        
+        const paystack = new PaystackPop();
+        let ref = generateId()
+        setReference(ref)
+        paystack.newTransaction({
+            key: `${import.meta.env.VITE_LIVE_PUBLIC_KEY}`,
+            email: customerEmail,
+            amount: 5000,
+            currency: 'KES',
+            ref: ref,
+            onSuccess: (transaction) => { 
+                console.log(transaction);
+                setShowPopup(true)
+            },
+            onCancel: () => {
+                // user closed popup
+                console.log("cancelled");
+            }
+        });
     };
 
     const submitResults = () => {
@@ -410,7 +411,7 @@ export function GradeForm({ onSubmit }) {
                 <iframe 
                     width="560" 
                     height="315" 
-                    src="https://www.youtube.com/embed/Rlhgli_X4wQ?si=Q6yvIN0vWMbvSMik" 
+                    src="https://www.youtube.com/embed/vnajCljO4jo?si=WB6Ck0phrsznC077" 
                     title="YouTube video player" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                     allowfullscreen></iframe>
@@ -448,7 +449,8 @@ export function GradeForm({ onSubmit }) {
                 ))}
 
                 <div className="customerEmail">
-                    <label>Enter your Email. It will be used to send a Digital receipt.</label>
+                    <label>Enter your Email. It will be used to send a Digital receipt. PLEASE NOTE: 
+                        Cluster Points will NOT be sent via email. Download from the website after payment</label>
                     <br />
                     <input 
                         type="text" 

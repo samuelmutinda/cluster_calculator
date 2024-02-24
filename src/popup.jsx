@@ -5,27 +5,26 @@ Popup.propTypes = {
     onClose: PropTypes.func.isRequired
 };
 
-export function Popup({ trigger, onConfirmPayment, onClose }) {
+export function Popup({ trigger, onConfirmPayment }) {
     return (trigger) ? (
         <>
             <div className="popup">
                 <div className="popup_inner">
-                    <div className='popuptitle'>Confirm M-Pesa Payment</div>
+                    <div className='popuptitle'>M-Pesa Payment Confirmed. CLICK THE BUTTON TO VIEW YOUR CLUSTER POINTS</div>
                     <p className='popupdescription'>
-                        You will receive an M-Pesa popup on your phone. Enter your M-Pesa pin to approve the transaction.
-                        When you have received the M-Pesa 
-                        transaction message, click Confirm Payment
+                        Your payment has been approved! Thank you!.
+                        Click the button below to view your cluster points.
                     </p>
-                    <p className='popupdescription'>Awaiting Payment..</p>
-                    <div className='loader'></div>
+                    {/* <p className='popupdescription'>Awaiting Payment..</p> */}
+                    {/* <div className='loader'></div> */}
                     <p className='popupdescription2'>
                         Report any payment issues to us. Our technical team 
                         will sort them our promptly.
                     </p>
-                    <button className="closebtn" onClick={onClose}>Close</button>
+                    {/* <button className="closebtn" onClick={onClose}>Close</button> */}
 
                     <div className='confirmbtndiv'>
-                        <button className='confirmbtn' onClick={onConfirmPayment}>Confirm Payment</button>
+                        <button className='confirmbtn' onClick={onConfirmPayment}>View Points</button>
                     </div>
                 </div>
             </div>
